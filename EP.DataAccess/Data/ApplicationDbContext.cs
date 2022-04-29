@@ -14,5 +14,7 @@ namespace EP.DataAccess.Data
         { }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<ApplicationUser>? ApplicationUsers { get; set; }
+
     }
 }
