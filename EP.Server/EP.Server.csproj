@@ -20,8 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EP.Business\EP.Business.csproj" />
     <ProjectReference Include="..\EP.Common\EP.Common.csproj" />
     <ProjectReference Include="..\EP.DataAccess\EP.DataAccess.csproj" />
+    <ProjectReference Include="..\EP.Models\EP.Models.csproj" />
   </ItemGroup>
 
 </Project>

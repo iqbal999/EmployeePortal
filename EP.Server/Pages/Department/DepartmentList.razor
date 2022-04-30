@@ -1,5 +1,71 @@
 ﻿@page "/department"
+@inject IDepartmentRepository _departmentRepository
+@inject NavigationManager _navigationManager
+<h3>DepartmentList</h3>
+
+<div class="row mt-4">
+    <div class="col-6">
+        <h4 class="card-title text-info">Category</h4>
+    </div>
+
+    <div class="col-4 offset-2">
+        <a href="department/create" class="btn btn-primary form-control">Add New</a>
+    </div>
+
+    <div class="col-12 mt-2">
+        @if (Departments.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Remarks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var objCat in Departments)
+                    {
+                        <tr>
+                            <td>@objCat.Name</td>
+                            <td>@objCat.Remarks</td>
+                            <td>
+                                <NavLink href="@($"department/edit/{objCat.Id}")" class="btn btn-sm btn-primary">Edit</NavLink>
+                                @*<button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (IsLoading)
+            {
+                <div class="text-center">
+                    <img src="/images/loading.gif"/>
+                </div>
+            }
+            else
+            {
+                <p>No Record Found</p>
+            }
+        }
+    </div>
+</div>
 
 @code {
+
+    private IEnumerable<DepartmentDTO> Departments { get; set; } = new List<DepartmentDTO>();
+    public bool IsLoading { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        Departments = await _departmentRepository.GetAll();
+        IsLoading = true;
+    }
 
 }

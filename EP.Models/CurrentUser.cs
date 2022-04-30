@@ -1,4 +1,4 @@
-﻿namespace EP.Server
+﻿namespace EP.Models
 {
     public static class CurrentUser
     {

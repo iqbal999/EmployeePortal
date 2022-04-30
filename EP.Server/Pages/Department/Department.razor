@@ -1,0 +1,78 @@
+﻿@page "/department/create"
+@page "/department/edit/{id:int}"
+
+@inject IDepartmentRepository _departmentRepository
+@inject NavigationManager _navigationManager
+<h3>Department</h3>
+
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3 ml-3">@Title Category</h3>
+
+    <div class="col-8">
+        @if (IsLoading)
+        {
+            <div class="text-center">
+                <img src="/images/loading.gif" />
+            </div>
+        }
+        else
+        {
+            <EditForm Model="DepartmentDTO" OnValidSubmit="HandleDepartment">
+                <DataAnnotationsValidator />
+                @*<ValidationSummary/>*@
+                <div class="form-group">
+                    <label>Name</label>
+                    <InputText @bind-Value="DepartmentDTO.Name" class="form-control"></InputText>
+                    <ValidationMessage For="()=>DepartmentDTO.Name" />
+                </div>
+
+                <div class="form-group">
+                    <label>Remarks</label>
+                    <InputText @bind-Value="DepartmentDTO.Remarks" class="form-control"></InputText>
+                    <ValidationMessage For="()=>DepartmentDTO.Remarks" />
+                </div>
+
+                <div class="form-group py-2">
+                    <button class="btn btn-primary">@Title</button>
+                    <NavLink href="department" class="btn btn-secondary">Back to Index</NavLink>
+                </div>
+            </EditForm>
+        }
+
+    </div>
+</div>
+
+@code {
+    public DepartmentDTO DepartmentDTO { get; set; } = new();
+    public string Title { get; set; } = "Create";
+    public bool IsLoading { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == 0)
+        {
+            IsLoading = false;
+        }
+        else
+        {
+            Title = "Edit";
+            DepartmentDTO = await _departmentRepository.Get(Id);
+        }
+    }
+
+    private async Task HandleDepartment()
+    {
+        @if (DepartmentDTO.Id == 0)
+        {
+            await _departmentRepository.Create(DepartmentDTO);
+        }
+        else
+        {
+            await _departmentRepository.Update(DepartmentDTO);
+        }
+        _navigationManager.NavigateTo("/department");
+    }
+
+}

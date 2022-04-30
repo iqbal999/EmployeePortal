@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.Server", "EP.Server\EP.Server.csproj", "{FE97CA2F-C553-44E2-801D-BA3E6A029ED3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.Server", "EP.Server\EP.Server.csproj", "{FE97CA2F-C553-44E2-801D-BA3E6A029ED3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.Client", "EP.Client\EP.Client.csproj", "{B04DB8DA-ABF9-4112-9219-9BF2E72E983E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.Client", "EP.Client\EP.Client.csproj", "{B04DB8DA-ABF9-4112-9219-9BF2E72E983E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.Models", "EP.Models\EP.Models.csproj", "{5D42F76B-E03A-4FEE-8380-A14056AE6AB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.Models", "EP.Models\EP.Models.csproj", "{5D42F76B-E03A-4FEE-8380-A14056AE6AB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.DataAccess", "EP.DataAccess\EP.DataAccess.csproj", "{6BFEFBA5-E2DB-4FC0-A9E9-EBC2FE12ECB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.DataAccess", "EP.DataAccess\EP.DataAccess.csproj", "{6BFEFBA5-E2DB-4FC0-A9E9-EBC2FE12ECB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.Common", "EP.Common\EP.Common.csproj", "{8760F28C-ABA6-41B1-91AC-84CE31891B3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.Common", "EP.Common\EP.Common.csproj", "{8760F28C-ABA6-41B1-91AC-84CE31891B3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.Business", "EP.Business\EP.Business.csproj", "{C9FEB5E8-B711-4F57-B0FD-DD7F7BD2E000}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.Business", "EP.Business\EP.Business.csproj", "{C9FEB5E8-B711-4F57-B0FD-DD7F7BD2E000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EP.API", "EP.API\EP.API.csproj", "{6BACEE6D-9C16-402F-AAE8-309C5FB7C43B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EP.API", "EP.API\EP.API.csproj", "{6BACEE6D-9C16-402F-AAE8-309C5FB7C43B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
