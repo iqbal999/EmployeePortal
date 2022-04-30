@@ -1,8 +1,10 @@
 ﻿@page "/department"
 @inject IDepartmentRepository _departmentRepository
 @inject NavigationManager _navigationManager
+@inject IJSRuntime _jsRuntime
 <h3>DepartmentList</h3>
 
+<_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
 <div class="row mt-4">
     <div class="col-6">
         <h4 class="card-title text-info">Category</h4>
@@ -32,7 +34,7 @@
                             <td>@objCat.Remarks</td>
                             <td>
                                 <NavLink href="@($"department/edit/{objCat.Id}")" class="btn btn-sm btn-primary">Edit</NavLink>
-                                @*<button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>*@
+                                <button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>
                             </td>
                         </tr>
                     }
@@ -58,14 +60,32 @@
 @code {
 
     private IEnumerable<DepartmentDTO> Departments { get; set; } = new List<DepartmentDTO>();
-    public bool IsLoading { get; set; }
-
+    public bool IsLoading { get; set; } = false;
+    public int DeleteCategoryId { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
         Departments = await _departmentRepository.GetAll();
+        IsLoading = false;
+    }
+
+    private void HandleDelete(int id)
+    {
+        DeleteCategoryId = id;
+        _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
+    }
+
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
         IsLoading = true;
+        if(isConfirmed && DeleteCategoryId != 0)
+        {
+            await _departmentRepository.Delete(DeleteCategoryId);
+            Departments = await _departmentRepository.GetAll();
+            await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
+        }
+        IsLoading = false;
     }
 
 }
