@@ -51,5 +51,8 @@ namespace EP.Models
         public string ImageFileExtension { get; set; } = string.Empty;
         
         public string ImagePath { get; set; } = string.Empty;
+
+        [Required]
+        public string Gender { get; set; } = string.Empty;
     }
 }

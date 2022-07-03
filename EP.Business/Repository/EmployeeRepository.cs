@@ -79,6 +79,7 @@ namespace EP.Business.Repository
             {
                 obj.FirstName = objDTO.FirstName;
                 obj.LastName = objDTO.LastName;
+                obj.Gender = objDTO.Gender;
                 obj.Email = objDTO.Email;
                 obj.Phone = objDTO.Phone;
                 obj.Phone2 = objDTO.Phone2;

@@ -22,6 +22,7 @@
                     <tr>
                         <th>First Name</th>
                         <th>Last Name</th>
+                        <th>Gender</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Department</th>
@@ -40,13 +41,14 @@
                         <tr>
                             <td>@objCat.FirstName</td>
                             <td>@objCat.LastName</td>
+                            <td>@objCat.Gender</td>
                             <td>@objCat.Email</td>
                             <td>@objCat.Phone</td>
-                            <td>@objCat.Department.Name</td>
-                            <td>@objCat.Designation.Name</td>
+                            <td>@objCat.Department!.Name</td>
+                            <td>@objCat.Designation!.Name</td>
                             @if(objCat.ManagerId != null)
                             {
-                                <td>@objCat.Manager.FirstName @objCat.Manager.LastName</td>
+                                <td>@objCat.Manager!.FirstName @objCat.Manager.LastName</td>
                             }
                             else
                             {

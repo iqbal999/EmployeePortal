@@ -53,5 +53,7 @@ namespace EP.DataAccess
 
         public string ImagePath { get; set; } = string.Empty;
 
+        public string Gender { get; set; } = string.Empty;
+
     }
 }
