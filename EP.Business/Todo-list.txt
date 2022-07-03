@@ -1,0 +1,9 @@
+﻿1. Department Entry -- Done
+2. Designation Entry -- Done
+3. Employee Entry -- Done
+4. Leave Type Entry -- Done
+5. Leave Entry -- Need to work
+6. Leave Application Entry -- Need to work
+7. Daily Task Entry -- Need to work
+8. Task Scheduling -- Need to work
+9. Conveyance Bill Entry -- Need to work

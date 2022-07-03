@@ -17,6 +17,7 @@ namespace EP.DataAccess.Data
         public DbSet<Designation> Designations { get; set; }
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
         public DbSet<ApplicationUser>? ApplicationUsers { get; set; }
 
     }

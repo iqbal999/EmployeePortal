@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace EP.DataAccess
 {
-    public class EmployeeLeave
+    public class EmployeeLeave : BaseProperty
     {
-        [Key]
-        public int Id { get; set; }
-
         public int EmployeeId { get; set; }
         [ForeignKey("EmployeeId")]
         public Employee? Employee { get; set; }

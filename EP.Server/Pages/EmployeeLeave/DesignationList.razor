@@ -1,0 +1,105 @@
+﻿@page "/designationsssssd"
+@inject IDesignationRepository _designationRepository
+@inject NavigationManager _navigationManager
+@inject IJSRuntime _jsRuntime
+@attribute [Authorize()]
+
+<_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
+<div class="row mt-4">
+    <div class="col-6">
+        <h4 class="card-title text-info">Designation</h4>
+    </div>
+
+    <div class="col-4 offset-2">
+        <a href="designation/create" class="btn btn-primary form-control">Add New</a>
+    </div>
+
+    <div class="col-12 mt-2">
+        @if (Designations.Any())
+        {
+            <table id="mytable1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Remarks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var objCat in Designations)
+                    {
+                        <tr>
+                            <td>@objCat.Name</td>
+                            <td>@objCat.Remarks</td>
+                            <td>
+                                <NavLink href="@($"designation/edit/{objCat.Id}")" class="btn btn-sm btn-primary">Edit</NavLink>
+                                <button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (IsLoading)
+            {
+                <div class="text-center">
+                    <img src="/images/loading.gif"/>
+                </div>
+            }
+            else
+            {
+                <p>No Record Found</p>
+            }
+        }
+    </div>
+</div>
+
+<style>
+    table.dataTable{
+        border-collapse: collapse;
+    }
+</style>
+
+@code {
+
+    private IEnumerable<DesignationDTO> Designations { get; set; } = new List<DesignationDTO>();
+    public bool IsLoading { get; set; } = false;
+    public int DeleteDesignationId { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        Designations = await _designationRepository.GetAll();
+        IsLoading = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _jsRuntime.InvokeVoidAsync("InitTable");
+        }
+    }
+
+    private void HandleDelete(int id)
+    {
+        DeleteDesignationId = id;
+        _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
+    }
+
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsLoading = true;
+        if(isConfirmed && DeleteDesignationId != 0)
+        {
+            await _designationRepository.Delete(DeleteDesignationId);
+            Designations = await _designationRepository.GetAll();
+            await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
+        }
+        IsLoading = false;
+    }
+
+}
