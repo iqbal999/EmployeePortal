@@ -1,9 +1,8 @@
-﻿@page "/department"
+﻿@page "/department2"
 @inject IDepartmentRepository _departmentRepository
 @inject NavigationManager _navigationManager
 @inject IJSRuntime _jsRuntime
-@attribute [Authorize()]
-
+@*@attribute [Authorize()]*@
 
 <_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
 <div class="row mt-4">
@@ -11,8 +10,8 @@
         <h4 class="card-title text-info">Department</h4>
     </div>
 
-    <div class="col-2 offset-4">
-        <a href="department/create" class="btn btn-primary form-control"><i class="bi bi-plus-circle-fill"></i> Add New</a>
+    <div class="col-4 offset-2">
+        <a href="department/create" class="btn btn-primary form-control">Add New</a>
     </div>
 
     <div class="col-12 mt-2">
@@ -23,23 +22,23 @@
                     <tr>
                         <th>Name</th>
                         <th>Remarks</th>
-                        <th>Actions</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
 
-                <tbody>
+                @*<tbody>
                     @foreach (var objCat in Departments)
                     {
                         <tr>
                             <td>@objCat.Name</td>
                             <td>@objCat.Remarks</td>
                             <td>
-                                <NavLink href="@($"department/edit/{objCat.Id}")" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></NavLink>
-                                <button class="btn btn-sm btn-outline-danger" @onclick="()=>HandleDelete(objCat.Id)"><i class="bi bi-trash"></i></button>
+                                <NavLink href="@($"department/edit/{objCat.Id}")" class="btn btn-sm btn-primary">Edit</NavLink>
+                                <button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>
                             </td>
                         </tr>
                     }
-                </tbody>
+                </tbody>*@
             </table>
         }
         else
@@ -81,7 +80,8 @@
     {
         if (firstRender)
         {
-            await _jsRuntime.InvokeVoidAsync("InitTable");
+            //await _jsRuntime.InvokeVoidAsync("InitTable");
+            await _jsRuntime.InvokeVoidAsync("LoadTable", Departments);
         }
     }
 

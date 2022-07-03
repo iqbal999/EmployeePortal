@@ -1,41 +1,40 @@
-﻿@page "/department"
-@inject IDepartmentRepository _departmentRepository
+﻿@page "/leavetype"
+@inject ILeaveTypeRepository _leaveTypeRepository
 @inject NavigationManager _navigationManager
 @inject IJSRuntime _jsRuntime
 @attribute [Authorize()]
 
-
 <_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
 <div class="row mt-4">
     <div class="col-6">
-        <h4 class="card-title text-info">Department</h4>
+        <h4 class="card-title text-info">Leave Type</h4>
     </div>
 
-    <div class="col-2 offset-4">
-        <a href="department/create" class="btn btn-primary form-control"><i class="bi bi-plus-circle-fill"></i> Add New</a>
+    <div class="col-4 offset-2">
+        <a href="leavetype/create" class="btn btn-primary form-control">Add New</a>
     </div>
 
     <div class="col-12 mt-2">
-        @if (Departments.Any())
+        @if (LeaveTypes.Any())
         {
             <table id="mytable1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Leave Type</th>
                         <th>Remarks</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var objCat in Departments)
+                    @foreach (var objCat in LeaveTypes)
                     {
                         <tr>
-                            <td>@objCat.Name</td>
+                            <td>@objCat.LeaveTypeName</td>
                             <td>@objCat.Remarks</td>
                             <td>
-                                <NavLink href="@($"department/edit/{objCat.Id}")" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></NavLink>
-                                <button class="btn btn-sm btn-outline-danger" @onclick="()=>HandleDelete(objCat.Id)"><i class="bi bi-trash"></i></button>
+                                <NavLink href="@($"leavetype/edit/{objCat.Id}")" class="btn btn-sm btn-primary">Edit</NavLink>
+                                <button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>
                             </td>
                         </tr>
                     }
@@ -66,14 +65,14 @@
 
 @code {
 
-    private IEnumerable<DepartmentDTO> Departments { get; set; } = new List<DepartmentDTO>();
+    private IEnumerable<LeaveTypeDTO> LeaveTypes { get; set; } = new List<LeaveTypeDTO>();
     public bool IsLoading { get; set; } = false;
-    public int DeleteCategoryId { get; set; } = 0;
+    public int DeleteLeaveTypeId { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        Departments = await _departmentRepository.GetAll();
+        LeaveTypes = await _leaveTypeRepository.GetAll();
         IsLoading = false;
     }
 
@@ -87,17 +86,17 @@
 
     private void HandleDelete(int id)
     {
-        DeleteCategoryId = id;
+        DeleteLeaveTypeId = id;
         _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
     }
 
     private async Task ConfirmDelete_Click(bool isConfirmed)
     {
         IsLoading = true;
-        if(isConfirmed && DeleteCategoryId != 0)
+        if(isConfirmed && DeleteLeaveTypeId != 0)
         {
-            await _departmentRepository.Delete(DeleteCategoryId);
-            Departments = await _departmentRepository.GetAll();
+            await _leaveTypeRepository.Delete(DeleteLeaveTypeId);
+            LeaveTypes = await _leaveTypeRepository.GetAll();
             await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
         }
         IsLoading = false;

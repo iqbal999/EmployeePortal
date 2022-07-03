@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace EP.Models
 {
-    public class DepartmentDTO : BaseProperty
+    public class LeaveTypeDTO : BaseProperty
     {
         [Required]
         [StringLength(100)]
-        public string Name { get; set; } = string.Empty;
+        [Display(Name = "Leave Type Name")]
+        public string LeaveTypeName { get; set; } = string.Empty;
 
     }
 }

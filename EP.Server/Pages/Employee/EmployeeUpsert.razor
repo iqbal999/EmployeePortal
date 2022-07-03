@@ -1,0 +1,242 @@
+﻿@page "/employee/create"
+@page "/employee/edit/{id:int}"
+@inject IDesignationRepository _designationRepository
+@inject IDepartmentRepository _departmentRepository
+@inject IEmployeeRepository _employeeRepository
+@inject NavigationManager _navigationManager
+@inject IFileUpload _fileUpload;
+@inject IJSRuntime _jsRuntime;
+@*@attribute [Authorize]*@
+
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3 ml-3">@Title Employee</h3>
+
+    <div class="col-8">
+        @if (IsLoading)
+        {
+            <div class="text-center">
+                <img src="/images/loading.gif" />
+            </div>
+        }
+        else
+        {
+            <EditForm Model="Employee" OnValidSubmit="UpsertEmployee">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <InputText @bind-Value="Employee!.FirstName" class="form-control"></InputText>
+                            <ValidationMessage For="()=>Employee.FirstName" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <InputText @bind-Value="Employee!.LastName" class="form-control"></InputText>
+                            <ValidationMessage For="()=>Employee.LastName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <InputText @bind-Value="Employee!.Email" class="form-control"></InputText>
+                    <ValidationMessage For="()=>Employee.Email" />
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <InputText @bind-Value="Employee!.Phone" class="form-control"></InputText>
+                            <ValidationMessage For="()=>Employee.Phone" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone 2</label>
+                            <InputText @bind-Value="Employee!.Phone2" class="form-control"></InputText>
+                            <ValidationMessage For="()=>Employee.Phone2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <InputSelect @bind-Value="Employee.DepartmentId" class="form-select">
+                                <option value="0" disabled="disabled" selected> -- Select Department -- </option>
+                                @foreach (var dep in Departments)
+                                {
+                                <option value="@dep.Id">@dep.Name</option>
+                                }
+                        </InputSelect>
+                        <ValidationMessage For="()=>Employee.DepartmentId" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Designation</label>
+                        <InputSelect @bind-Value="Employee.DesignationId" class="form-select">
+                            <option value="0" disabled="disabled" selected> -- Select Designation -- </option>
+                            @foreach (var desig in Designations)
+                                {
+                                <option value="@desig.Id">@desig.Name</option>
+                                }
+                        </InputSelect>
+                        <ValidationMessage For="()=>Employee.DesignationId" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Manager</label>
+                        <InputSelect @bind-Value="Employee.ManagerId" class="form-select">
+                            <option value="0" disabled="disabled" selected> -- Select Manager -- </option>
+                            @foreach (var manager in ManagerLists)
+                                {
+                                <option value="@manager.Id">@manager.FirstName @manager.LastName</option>
+                                }
+                        </InputSelect>
+                        <ValidationMessage For="()=>Employee.ManagerId" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Joining Date</label>
+                        <InputDate @bind-Value="Employee.JoiningDate" class="form-control"></InputDate>
+                        <ValidationMessage For="()=>Employee.JoiningDate" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Present Address</label>
+                        <InputTextArea @bind-Value="Employee.PresentAddress" class="form-control"></InputTextArea>
+                        <ValidationMessage For="()=>Employee.PresentAddress" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Permanent Address</label>
+                        <InputTextArea @bind-Value="Employee.PermanentAddress" class="form-control"></InputTextArea>
+                        <ValidationMessage For="()=>Employee.PermanentAddress" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group py-2">
+                <button class="btn btn-primary">@Title</button>
+                <NavLink href="employee" class="btn btn-secondary">Back to Index</NavLink>
+            </div>
+
+        </EditForm>
+        }
+    </div>
+    <div class="col-4 text-center">
+        <img src="@Employee.ImagePath" width="200" height="200" />
+        <div class="form-group py-3">
+            <InputFile OnChange="HandleImageUpload"></InputFile>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    input[type="file"] {    
+        border-radius: 0px;
+        border: 1px solid black;
+        padding: 1px;
+    }
+</style>
+
+@code {
+    public string Title { get; set; } = "Create";
+    public bool IsLoading { get; set; }
+    public EmployeeDTO Employee { get; set; } = new()
+        {
+            ImagePath = "/images/default.png"
+        };
+    public IEnumerable<DesignationDTO> Designations { get; set; } = new List<DesignationDTO>();
+    public IEnumerable<DepartmentDTO> Departments { get; set; } = new List<DepartmentDTO>();
+    public IEnumerable<EmployeeDTO> ManagerLists { get; set; } = new List<EmployeeDTO>();
+
+    public IBrowserFile? ImageFile { get; set; }
+    public string OldImageUrl { get; set; } = string.Empty;
+    [Parameter]
+    public int Id { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IsLoading = true;
+            Designations = await _designationRepository.GetAll();
+            Departments = await _departmentRepository.GetAll();
+            ManagerLists = await _employeeRepository.GetAll();
+            if (Id != 0)
+            {
+                // Update
+                Title = "Update";
+                Employee = await _employeeRepository.Get(Id);
+                OldImageUrl = Employee.ImagePath;
+            }
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        IsLoading = true;
+        try
+        {
+            if (e.GetMultipleFiles().Count > 0)
+            {
+                foreach (var file in e.GetMultipleFiles())
+                {
+                    System.IO.FileInfo fileInfo = new(file.Name);
+                    if (fileInfo.Extension.ToLower() == ".jpg" ||
+                    fileInfo.Extension.ToLower() == ".png" ||
+                    fileInfo.Extension.ToLower() == ".jpeg")
+                    {
+                        Employee.ImageFileExtension = fileInfo.Extension.ToLower();
+                        ImageFile = file;
+                    }
+                    else
+                    {
+                        //
+                    }
+                }
+            }
+            IsLoading = false;
+        }
+        catch (Exception)
+        {
+
+        }
+    }
+
+    private async Task UpsertEmployee()
+    {
+        @if (Employee!.Id == 0)
+        {
+            if(ImageFile != null)
+                Employee.ImagePath = await _fileUpload.UploadFile(ImageFile!);
+            await _employeeRepository.Create(Employee);
+            //await _jsRuntime.ToastrSuccess("Product Added Successfully");
+        }
+        else
+        {
+            if (OldImageUrl != Employee.ImagePath)
+            {
+                _fileUpload.DeleteFile(OldImageUrl);
+            }
+            await _employeeRepository.Update(Employee);
+            //await _jsRuntime.ToastrSuccess("Product Updated Successfully");
+        }
+        _navigationManager.NavigateTo("employee");
+    }
+}

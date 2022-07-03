@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EP.Models
 {
-    public class DepartmentDTO : BaseProperty
+    public class DesignationDTO : BaseProperty
     {
         [Required]
         [StringLength(100)]

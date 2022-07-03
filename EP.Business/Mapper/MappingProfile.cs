@@ -14,6 +14,9 @@ namespace EP.Business.Mapper
         public MappingProfile()
         {
             CreateMap<Department, DepartmentDTO>().ReverseMap();
+            CreateMap<Designation, DesignationDTO>().ReverseMap();
+            CreateMap<LeaveType, LeaveTypeDTO>().ReverseMap();
+            CreateMap<Employee, EmployeeDTO>().ReverseMap();
         }
     }
 }

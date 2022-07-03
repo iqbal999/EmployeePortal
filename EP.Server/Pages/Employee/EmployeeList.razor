@@ -1,0 +1,128 @@
+﻿@page "/employee"
+@inject IEmployeeRepository _empoyeeRepository
+@inject NavigationManager _navigationManager
+@inject IJSRuntime _jsRuntime
+@*@attribute [Authorize()]*@
+
+<_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
+<div class="row mt-4">
+    <div class="col-6">
+        <h4 class="card-title text-info">Employee</h4>
+    </div>
+
+    <div class="col-4 offset-2">
+        <a href="employee/create" class="btn btn-primary form-control">Add New</a>
+    </div>
+
+    <div class="col-12 mt-2">
+        @if (Employees.Any())
+        {
+            <table id="mytable1" class="table table-bordered table-striped">
+                <thead style="font-size: 12px;">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Manager</th>
+                        <th>Joining Date</th>
+                        <th>Present Add</th>
+                        <th>Permanent Add</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody style="font-size: 12px;">
+                    @foreach (var objCat in Employees)
+                    {
+                        <tr>
+                            <td>@objCat.FirstName</td>
+                            <td>@objCat.LastName</td>
+                            <td>@objCat.Email</td>
+                            <td>@objCat.Phone</td>
+                            <td>@objCat.Department.Name</td>
+                            <td>@objCat.Designation.Name</td>
+                            @if(objCat.ManagerId != null)
+                            {
+                                <td>@objCat.Manager.FirstName @objCat.Manager.LastName</td>
+                            }
+                            else
+                            {
+                                <td>No Manager</td>
+                            }
+                            <td>@objCat.JoiningDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@objCat.PresentAddress</td>
+                            <td>@objCat.PermanentAddress</td>
+                            <td>
+                                <NavLink href="@($"employee/edit/{objCat.Id}")" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></NavLink>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="()=>HandleDelete(objCat.Id)"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            if (IsLoading)
+            {
+                <div class="text-center">
+                    <img src="/images/loading.gif"/>
+                </div>
+            }
+            else
+            {
+                <p>No Record Found</p>
+            }
+        }
+    </div>
+</div>
+
+<style>
+    table.dataTable{
+        border-collapse: collapse;
+    }
+</style>
+
+@code {
+
+    private IEnumerable<EmployeeDTO> Employees { get; set; } = new List<EmployeeDTO>();
+    public bool IsLoading { get; set; } = false;
+    public int DeleteEmployeeId { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        Employees = await _empoyeeRepository.GetAll();
+        IsLoading = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _jsRuntime.InvokeVoidAsync("InitTable");
+        }
+    }
+
+    private void HandleDelete(int id)
+    {
+        DeleteEmployeeId = id;
+        _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
+    }
+
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsLoading = true;
+        if(isConfirmed && DeleteEmployeeId != 0)
+        {
+            await _empoyeeRepository.Delete(DeleteEmployeeId);
+            Employees = await _empoyeeRepository.GetAll();
+            await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
+        }
+        IsLoading = false;
+    }
+
+}

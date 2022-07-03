@@ -1,12 +1,12 @@
-﻿@page "/department/create"
-@page "/department/edit/{id:int}"
+﻿@page "/leavetype/create"
+@page "/leavetype/edit/{id:int}"
 
-@inject IDepartmentRepository _departmentRepository
+@inject ILeaveTypeRepository _leaveTypeRepository
 @inject NavigationManager _navigationManager
 @attribute [Authorize()]
 
 <div class="row my-2">
-    <h3 class="card-title text-primary mb-3 ml-3">@Title Department</h3>
+    <h3 class="card-title text-primary mb-3 ml-3">@Title Leave Type</h3>
 
     <div class="col-8">
         @if (IsLoading)
@@ -17,23 +17,23 @@
         }
         else
         {
-            <EditForm Model="DepartmentDTO" OnValidSubmit="HandleDepartment">
+            <EditForm Model="LeaveTypeDTO" OnValidSubmit="HandleDepartment">
                 <DataAnnotationsValidator />
                 <div class="form-group">
-                    <label>Name</label>
-                    <InputText @bind-Value="DepartmentDTO.Name" class="form-control"></InputText>
-                    <ValidationMessage For="()=>DepartmentDTO.Name" />
+                    <label>Leave Type Name</label>
+                    <InputText @bind-Value="LeaveTypeDTO.LeaveTypeName" class="form-control"></InputText>
+                    <ValidationMessage For="()=>LeaveTypeDTO.LeaveTypeName" />
                 </div>
 
                 <div class="form-group">
                     <label>Remarks</label>
-                    <InputText @bind-Value="DepartmentDTO.Remarks" class="form-control"></InputText>
-                    <ValidationMessage For="()=>DepartmentDTO.Remarks" />
+                    <InputText @bind-Value="LeaveTypeDTO.Remarks" class="form-control"></InputText>
+                    <ValidationMessage For="()=>LeaveTypeDTO.Remarks" />
                 </div>
 
                 <div class="form-group py-2">
                     <button class="btn btn-primary">@Title</button>
-                    <NavLink href="department" class="btn btn-secondary">Back to Index</NavLink>
+                    <NavLink href="leavetype" class="btn btn-secondary">Back to Index</NavLink>
                 </div>
             </EditForm>
         }
@@ -42,7 +42,7 @@
 </div>
 
 @code {
-    public DepartmentDTO DepartmentDTO { get; set; } = new();
+    public LeaveTypeDTO LeaveTypeDTO { get; set; } = new();
     public string Title { get; set; } = "Create";
     public bool IsLoading { get; set; }
     [Parameter]
@@ -57,21 +57,21 @@
         else
         {
             Title = "Edit";
-            DepartmentDTO = await _departmentRepository.Get(Id);
+            LeaveTypeDTO = await _leaveTypeRepository.Get(Id);
         }
     }
 
     private async Task HandleDepartment()
     {
-        @if (DepartmentDTO.Id == 0)
+        @if (LeaveTypeDTO.Id == 0)
         {
-            await _departmentRepository.Create(DepartmentDTO);
+            await _leaveTypeRepository.Create(LeaveTypeDTO);
         }
         else
         {
-            await _departmentRepository.Update(DepartmentDTO);
+            await _leaveTypeRepository.Update(LeaveTypeDTO);
         }
-        _navigationManager.NavigateTo("/department");
+        _navigationManager.NavigateTo("/leavetype");
     }
 
 }

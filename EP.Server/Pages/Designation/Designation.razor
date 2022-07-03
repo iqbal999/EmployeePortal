@@ -1,12 +1,12 @@
-﻿@page "/department/create"
-@page "/department/edit/{id:int}"
+﻿@page "/designation/create"
+@page "/designation/edit/{id:int}"
 
-@inject IDepartmentRepository _departmentRepository
+@inject IDesignationRepository _designationRepository
 @inject NavigationManager _navigationManager
 @attribute [Authorize()]
 
 <div class="row my-2">
-    <h3 class="card-title text-primary mb-3 ml-3">@Title Department</h3>
+    <h3 class="card-title text-primary mb-3 ml-3">@Title Designation</h3>
 
     <div class="col-8">
         @if (IsLoading)
@@ -17,23 +17,23 @@
         }
         else
         {
-            <EditForm Model="DepartmentDTO" OnValidSubmit="HandleDepartment">
+            <EditForm Model="DesignationDTO" OnValidSubmit="HandleDepartment">
                 <DataAnnotationsValidator />
                 <div class="form-group">
                     <label>Name</label>
-                    <InputText @bind-Value="DepartmentDTO.Name" class="form-control"></InputText>
-                    <ValidationMessage For="()=>DepartmentDTO.Name" />
+                    <InputText @bind-Value="DesignationDTO.Name" class="form-control"></InputText>
+                    <ValidationMessage For="()=>DesignationDTO.Name" />
                 </div>
 
                 <div class="form-group">
                     <label>Remarks</label>
-                    <InputText @bind-Value="DepartmentDTO.Remarks" class="form-control"></InputText>
-                    <ValidationMessage For="()=>DepartmentDTO.Remarks" />
+                    <InputText @bind-Value="DesignationDTO.Remarks" class="form-control"></InputText>
+                    <ValidationMessage For="()=>DesignationDTO.Remarks" />
                 </div>
 
                 <div class="form-group py-2">
                     <button class="btn btn-primary">@Title</button>
-                    <NavLink href="department" class="btn btn-secondary">Back to Index</NavLink>
+                    <NavLink href="designation" class="btn btn-secondary">Back to Index</NavLink>
                 </div>
             </EditForm>
         }
@@ -42,7 +42,7 @@
 </div>
 
 @code {
-    public DepartmentDTO DepartmentDTO { get; set; } = new();
+    public DesignationDTO DesignationDTO { get; set; } = new();
     public string Title { get; set; } = "Create";
     public bool IsLoading { get; set; }
     [Parameter]
@@ -57,21 +57,21 @@
         else
         {
             Title = "Edit";
-            DepartmentDTO = await _departmentRepository.Get(Id);
+            DesignationDTO = await _designationRepository.Get(Id);
         }
     }
 
     private async Task HandleDepartment()
     {
-        @if (DepartmentDTO.Id == 0)
+        @if (DesignationDTO.Id == 0)
         {
-            await _departmentRepository.Create(DepartmentDTO);
+            await _designationRepository.Create(DesignationDTO);
         }
         else
         {
-            await _departmentRepository.Update(DepartmentDTO);
+            await _designationRepository.Update(DesignationDTO);
         }
-        _navigationManager.NavigateTo("/department");
+        _navigationManager.NavigateTo("/designation");
     }
 
 }
