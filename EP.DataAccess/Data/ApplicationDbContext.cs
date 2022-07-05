@@ -18,6 +18,8 @@ namespace EP.DataAccess.Data
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        public DbSet<LeaveApplication> LeaveApplications { get; set; }
         public DbSet<ApplicationUser>? ApplicationUsers { get; set; }
 
     }

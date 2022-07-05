@@ -18,6 +18,8 @@ namespace EP.Business.Mapper
             CreateMap<LeaveType, LeaveTypeDTO>().ReverseMap();
             CreateMap<Employee, EmployeeDTO>().ReverseMap();
             CreateMap<EmployeeLeave, EmployeeLeaveDTO>().ReverseMap();
+            CreateMap<Status, StatusDTO>().ReverseMap();
+            CreateMap<LeaveApplication, LeaveApplicationDTO>().ReverseMap();
         }
     }
 }

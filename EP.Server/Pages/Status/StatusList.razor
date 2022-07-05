@@ -1,5 +1,5 @@
-﻿@page "/designationsssssd"
-@inject IDesignationRepository _designationRepository
+﻿@page "/status"
+@inject IStatusRepository _statusRepository
 @inject NavigationManager _navigationManager
 @inject IJSRuntime _jsRuntime
 @attribute [Authorize(Roles = SD.Role_Admin)]
@@ -7,34 +7,34 @@
 <_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
 <div class="row mt-4">
     <div class="col-6">
-        <h4 class="card-title text-info">Designation</h4>
+        <h4 class="card-title text-info">Status</h4>
     </div>
 
     <div class="col-4 offset-2">
-        <a href="designation/create" class="btn btn-primary form-control">Add New</a>
+        <a href="status/create" class="btn btn-primary form-control">Add New</a>
     </div>
 
     <div class="col-12 mt-2">
-        @if (Designations.Any())
+        @if (Statuses.Any())
         {
             <table id="mytable1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Status Name</th>
                         <th>Remarks</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var objCat in Designations)
+                    @foreach (var objCat in Statuses)
                     {
                         <tr>
-                            <td>@objCat.Name</td>
+                            <td>@objCat.StatusName</td>
                             <td>@objCat.Remarks</td>
                             <td>
-                                <NavLink href="@($"designation/edit/{objCat.Id}")" class="btn btn-sm btn-primary">Edit</NavLink>
-                                <button class="btn btn-sm btn-danger" @onclick="()=>HandleDelete(objCat.Id)">Delete</button>
+                                <NavLink href="@($"status/edit/{objCat.Id}")" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></NavLink>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="()=>HandleDelete(objCat.Id)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                     }
@@ -65,14 +65,14 @@
 
 @code {
 
-    private IEnumerable<DesignationDTO> Designations { get; set; } = new List<DesignationDTO>();
+    private IEnumerable<StatusDTO> Statuses { get; set; } = new List<StatusDTO>();
     public bool IsLoading { get; set; } = false;
-    public int DeleteDesignationId { get; set; } = 0;
+    public int DeleteStatusId { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        Designations = await _designationRepository.GetAll();
+        Statuses = await _statusRepository.GetAll();
         IsLoading = false;
     }
 
@@ -86,17 +86,17 @@
 
     private void HandleDelete(int id)
     {
-        DeleteDesignationId = id;
+        DeleteStatusId = id;
         _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
     }
 
     private async Task ConfirmDelete_Click(bool isConfirmed)
     {
         IsLoading = true;
-        if(isConfirmed && DeleteDesignationId != 0)
+        if(isConfirmed && DeleteStatusId != 0)
         {
-            await _designationRepository.Delete(DeleteDesignationId);
-            Designations = await _designationRepository.GetAll();
+            await _statusRepository.Delete(DeleteStatusId);
+            Statuses = await _statusRepository.GetAll();
             await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
         }
         IsLoading = false;

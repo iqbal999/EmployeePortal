@@ -2,7 +2,7 @@
 @inject IEmployeeRepository _empoyeeRepository
 @inject NavigationManager _navigationManager
 @inject IJSRuntime _jsRuntime
-@*@attribute [Authorize()]*@
+@attribute [Authorize(Roles = SD.Role_Admin)]
 
 <_DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></_DeleteConfirmation>
 <div class="row mt-4">

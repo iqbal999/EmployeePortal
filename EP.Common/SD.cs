@@ -10,5 +10,12 @@ namespace EP.Common
     {
         public const string Role_Admin = "Admin";
         public const string Role_Employee = "Employee";
+
+        //Status Variable
+        public const string Status_Pending = "Pending";
+        public const string Status_Draft = "Draft";
+        public const string Status_Accept = "Accepted";
+
+
     }
 }

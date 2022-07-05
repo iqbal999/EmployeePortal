@@ -17,14 +17,11 @@ namespace EP.Business.Repository
     {
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public DepartmentRepository(ApplicationDbContext db, IMapper mapper, AuthenticationStateProvider authenticationStateProvider)
+        public DepartmentRepository(ApplicationDbContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
-            _authenticationStateProvider = authenticationStateProvider;
-
         }
         public async Task<DepartmentDTO> Create(DepartmentDTO objDTO)
         {

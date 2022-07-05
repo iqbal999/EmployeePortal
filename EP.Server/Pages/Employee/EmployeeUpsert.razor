@@ -4,9 +4,10 @@
 @inject IDepartmentRepository _departmentRepository
 @inject IEmployeeRepository _employeeRepository
 @inject NavigationManager _navigationManager
+@inject UserManager<ApplicationUser> _userManager;
 @inject IFileUpload _fileUpload;
 @inject IJSRuntime _jsRuntime;
-@*@attribute [Authorize]*@
+@attribute [Authorize(Roles = SD.Role_Admin)]
 
 <div class="row my-2">
     <h3 class="card-title text-primary mb-3 ml-3">@Title Employee</h3>
@@ -54,7 +55,7 @@
                                 <option value="0" disabled="disabled" selected> -- Select Gender -- </option>
                                 @foreach (var gender in GenderList)
                                 {
-                                    <option value="@gender">@gender</option>
+                                <option value="@gender">@gender</option>
                                 }
                         </InputSelect>
                         <ValidationMessage For="()=>Employee.Gender" />
@@ -245,7 +246,9 @@
         {
             if (ImageFile != null)
                 Employee.ImagePath = await _fileUpload.UploadFile(ImageFile!);
-            await _employeeRepository.Create(Employee);
+            var resultObj = await _employeeRepository.Create(Employee);
+            await CreateUserForEmployee(resultObj);
+
             //await _jsRuntime.ToastrSuccess("Product Added Successfully");
         }
         else
@@ -258,5 +261,21 @@
             //await _jsRuntime.ToastrSuccess("Product Updated Successfully");
         }
         _navigationManager.NavigateTo("employee");
+    }
+
+    private async Task<bool> CreateUserForEmployee(EmployeeDTO obj)
+    {
+        ApplicationUser user = new()
+            {
+                FirstName = obj.FirstName,
+                LastName = obj.LastName,
+                EmpId = obj.Id.ToString(),
+                UserName = obj.Email,
+                Email = obj.Email,
+                EmailConfirmed = true
+            };
+        await _userManager.CreateAsync(user, "Emp@123");
+        await _userManager.AddToRoleAsync(user, SD.Role_Employee);
+        return true;
     }
 }

@@ -5,7 +5,7 @@
 @inject IEmployeeRepository _employeeRepository
 @inject ILeaveTypeRepository _leaveTypeRepository
 @inject NavigationManager _navigationManager
-@*@attribute [Authorize()]*@
+@attribute [Authorize(Roles = SD.Role_Admin)]
 
 <div class="row my-2">
     <h3 class="card-title text-primary mb-3 ml-3">@Title Employee Leave</h3>
@@ -135,13 +135,16 @@
     {
         @if (EmployeeLeaveDTO.Id == 0)
         {
+            EmployeeLeaveDTO.BalanceLeaveDays = EmployeeLeaveDTO.TotalLeaveDays;
             await _employeeLeaveRepository.Create(EmployeeLeaveDTO);
         }
         else
         {
             await _employeeLeaveRepository.Update(EmployeeLeaveDTO);
         }
+        EmployeeLeaveDays = await _employeeLeaveRepository.GetAll(EmployeeLeaveDTO.EmployeeId);
         _navigationManager.NavigateTo("/leave/create");
+
     }
 
     private async Task LoadLeave(int id)
